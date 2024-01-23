@@ -12,8 +12,13 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [total, setTotal] = useState(1);
+  const [totalPages, setTotalPeges] = useState(1);
+  const [current, setCurrent] = useState(1);
+  const [value, setValue] = useState('');
 
-  const request = (value) => {
+  const request = (values, page) => {
+    setValue(values);
+    setCurrent(page);
     const options = {
       method: 'GET',
       headers: {
@@ -22,21 +27,26 @@ export default function App() {
           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ZDIzOTZmNGIwNzhkMjg4OWU2ZWUzYTQxODUwZWRkZSIsInN1YiI6IjY1YTQyYjA5N2Q1ZjRiMDBjMmI3ZmRhNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7nY_exRhIjw9azUlCpqpdkN6ArNfIyFzetgsak6qTjQ',
       },
     };
-    if (value.trim().length !== 0) {
+    if (values.trim().length !== 0) {
       setLoading(true);
       fetch(
-        `https://api.themoviedb.org/3/search/movie?query=${value}&include_adult=false&language=en-US&page=1`,
+        `https://api.themoviedb.org/3/search/movie?query=${values}&include_adult=false&language=en-US&page=${page}`,
         options
       )
         .then((response) => response.json())
         .then((response) => {
           setLoading(false);
-          console.log(response);
           setMovies(response.results);
           setTotal(Number(response.total_results));
+          setTotalPeges(response.total_pages);
         })
         .catch((err) => setError(err));
     }
+  };
+
+  const onChange = (page) => {
+    request(value, page);
+    setCurrent(page);
   };
 
   if (loading) {
@@ -100,7 +110,7 @@ export default function App() {
       <Online>
         <div className="app">
           <Search request={request} />
-          <MoviesList movies={movies} />
+          <MoviesList movies={movies} current={current} totalPages={totalPages} onChange={onChange} />
         </div>
       </Online>
       <Offline>
