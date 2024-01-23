@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { Spin, Alert } from 'antd';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Offline, Online } from 'react-detect-offline';
 
 import Search from './components/Search';
 import MoviesList from './components/films/MoviesList';
@@ -6,6 +9,9 @@ import './app.css';
 
 export default function App() {
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [total, setTotal] = useState(1);
 
   const request = (value) => {
     const options = {
@@ -17,20 +23,92 @@ export default function App() {
       },
     };
     if (value.trim().length !== 0) {
+      setLoading(true);
       fetch(
         `https://api.themoviedb.org/3/search/movie?query=${value}&include_adult=false&language=en-US&page=1`,
         options
       )
         .then((response) => response.json())
-        .then((response) => setMovies(response.results))
-        .catch((err) => console.error(err));
+        .then((response) => {
+          setLoading(false);
+          console.log(response);
+          setMovies(response.results);
+          setTotal(Number(response.total_results));
+        })
+        .catch((err) => setError(err));
     }
   };
 
+  if (loading) {
+    return (
+      <>
+        <Online>
+          <div className="app">
+            <Search request={request} />
+            <Spin className="spin" />
+          </div>
+        </Online>
+        <Offline>
+          <div className="app">
+            <Search request={request} />
+            <Alert message="Отстутствует подключение к интернету" type="error" />
+          </div>
+        </Offline>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Online>
+          <div className="app">
+            <Search request={request} />
+            <Alert message={error} type="error" />
+          </div>
+        </Online>
+        <Offline>
+          <div className="app">
+            <Search request={request} />
+            <Alert message="Отстутствует подключение к интернету" type="error" />
+          </div>
+        </Offline>
+      </>
+    );
+  }
+
+  if (total === 0) {
+    return (
+      <>
+        <Online>
+          <div className="app">
+            <Search request={request} />
+            <Alert message="Увы! Не удалось найти фильмы по данному запросу, попробуйте еще раз" type="warning" />
+          </div>
+        </Online>
+        <Offline>
+          <div className="app">
+            <Search request={request} />
+            <Alert message="Отстутствует подключение к интернету" type="error" />
+          </div>
+        </Offline>
+      </>
+    );
+  }
   return (
-    <div className="app">
-      <Search request={request} />
-      <MoviesList movies={movies} />
-    </div>
+    <>
+      <Online>
+        <div className="app">
+          <Search request={request} />
+          <MoviesList movies={movies} />
+        </div>
+      </Online>
+      <Offline>
+        <div className="app">
+          <Search request={request} />
+          <Alert message="Отстутствует подключение к интернету" type="error" />
+        </div>
+      </Offline>
+    </>
   );
 }

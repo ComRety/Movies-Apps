@@ -9,7 +9,7 @@ export default function Movie({ item }) {
       <div className={classes.imageBlock}>
         <img
           alt="Постер фильма"
-          src={`https://image.tmdb.org/t/p/original${item.poster_path}`}
+          src={item.poster_path ? `https://image.tmdb.org/t/p/original${item.poster_path}` : ''}
           width={100}
           className={classes.image}
         />
@@ -19,7 +19,9 @@ export default function Movie({ item }) {
           <h2 className={classes.title}>{item.original_title}</h2>
           <div className={classes.reting}>{Number(item.vote_average).toFixed(1)}</div>
         </div>
-        <span className={classes.date}>{format(new Date(item.release_date), 'MMMM dd, yyyy')}</span>
+        <span className={classes.date}>
+          {item.release_date ? format(new Date(item.release_date), 'MMMM dd, yyyy') : ''}
+        </span>
         <div className={classes.listGenre}>
           <span className={classes.genre}>Action</span>
           <span className={classes.genre}>Drama</span>
