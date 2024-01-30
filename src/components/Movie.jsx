@@ -4,7 +4,7 @@ import { Rate } from 'antd';
 import Genre from './Genre';
 import classes from './movies.module.css';
 
-export default function Movie({ item, genre, value, addRating }) {
+export default function Movie({ item, genre, addRating }) {
   let key = -1;
   const listGenre = [];
 
@@ -75,7 +75,7 @@ export default function Movie({ item, genre, value, addRating }) {
           })}
         </div>
         <p className={classes.overview}>{reduction(item.overview)}</p>
-        <Rate className={classes.rate} allowHalf count={10} value={value} onChange={ratingApp} />
+        <Rate className={classes.rate} allowHalf count={10} value={item.rating} onChange={ratingApp} />
       </div>
     </li>
   );

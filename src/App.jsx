@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Spin, Alert, Pagination } from 'antd';
+import { Spin, Alert } from 'antd';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Online } from 'react-detect-offline';
 
@@ -89,16 +89,14 @@ export default function App() {
       options
     )
       .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
+      .then(() => {
         rating();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => setError(err));
   };
 
   const request = (values, page) => {
     setValue(values);
-    console.log(value, values);
     setCurrent(page);
     const options = {
       method: 'GET',
@@ -115,9 +113,9 @@ export default function App() {
         .then((response) => response.json())
         .then((response) => {
           setLoading(false);
-          setMovies(response.results);
           setTotal(Number(response.total_results));
           setTotalPeges(response.total_pages);
+          setMovies(response.results);
         })
         .catch((err) => setError(err));
     }
@@ -133,7 +131,16 @@ export default function App() {
       <>
         <Online>
           <div className="app">
-            <Tab genre={genre} movies={movies} arrRating={arrRating} addRating={addRating} request={request} />
+            <Tab
+              genre={genre}
+              onChange={onChange}
+              movies={movies}
+              arrRating={arrRating}
+              addRating={addRating}
+              request={request}
+              current={current}
+              totalPages={totalPages}
+            />
             <Spin className="spin" />
           </div>
         </Online>
@@ -147,7 +154,16 @@ export default function App() {
       <>
         <Online>
           <div className="app">
-            <Tab genre={genre} movies={movies} arrRating={arrRating} addRating={addRating} request={request} />
+            <Tab
+              genre={genre}
+              onChange={onChange}
+              movies={movies}
+              arrRating={arrRating}
+              addRating={addRating}
+              request={request}
+              current={current}
+              totalPages={totalPages}
+            />
             <Alert message={error} type="error" />
           </div>
         </Online>
@@ -161,7 +177,16 @@ export default function App() {
       <>
         <Online>
           <div className="app">
-            <Tab genre={genre} movies={movies} arrRating={arrRating} addRating={addRating} request={request} />
+            <Tab
+              genre={genre}
+              onChange={onChange}
+              movies={movies}
+              arrRating={arrRating}
+              addRating={addRating}
+              request={request}
+              current={current}
+              totalPages={totalPages}
+            />
             <Alert message="Не удалось найти фильмы по данному запросу, попробуйте еще раз" type="warning" />
           </div>
         </Online>
@@ -174,13 +199,15 @@ export default function App() {
     <>
       <Online>
         <div className="app">
-          <Tab genre={genre} movies={movies} arrRating={arrRating} addRating={addRating} request={request} />
-          <Pagination
-            className="pagination"
-            current={current}
-            defaultCurrent={1}
+          <Tab
+            genre={genre}
             onChange={onChange}
-            total={totalPages > 5 ? 50 : totalPages * 10}
+            movies={movies}
+            arrRating={arrRating}
+            addRating={addRating}
+            request={request}
+            current={current}
+            totalPages={totalPages}
           />
         </div>
       </Online>

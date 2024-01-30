@@ -48,7 +48,6 @@ export default function Rating({ item, genre, value, addRating }) {
 
   const rating = (number) => {
     addRating(item.id, number);
-    console.log(number);
   };
 
   return (
@@ -76,7 +75,7 @@ export default function Rating({ item, genre, value, addRating }) {
           })}
         </div>
         <p className={classes.overview}>{reduction(item.overview)}</p>
-        <Rate allowHalf count={10} value={value} onChange={rating} />
+        <Rate className={classes.rate} allowHalf count={10} value={value} onChange={rating} />
       </div>
     </li>
   );

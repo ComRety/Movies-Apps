@@ -14,7 +14,8 @@ body {
 
 .pagination {
   position: relative;
-  margin: 30px auto 0 45%;
+  display: flex;
+  justify-content: center;
 }
 @media (max-width: 768px) {
   .app {

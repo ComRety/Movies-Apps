@@ -1,15 +1,24 @@
-import { Tabs } from 'antd';
+import { Tabs, Pagination } from 'antd';
 
 import MoviesList from './MoviesList';
 import RatingFilms from './RatingFilms';
 
-export default function Tab({ genre, movies, arrRating, request, addRating }) {
+export default function Tab({ genre, movies, arrRating, request, addRating, current, onChange, totalPages }) {
   const items = [
     {
       key: 'Search',
       label: 'Search',
       children: (
-        <MoviesList addRating={addRating} movies={movies} genre={genre} arrRating={arrRating} request={request} />
+        <>
+          <MoviesList addRating={addRating} movies={movies} genre={genre} request={request} />
+          <Pagination
+            className="pagination"
+            current={current}
+            defaultCurrent={1}
+            onChange={onChange}
+            total={totalPages > 5 ? 50 : totalPages * 10}
+          />
+        </>
       ),
     },
     {
@@ -18,5 +27,5 @@ export default function Tab({ genre, movies, arrRating, request, addRating }) {
       children: <RatingFilms arrRating={arrRating} genre={genre} addRating={addRating} />,
     },
   ];
-  return <Tabs destroyInactiveTabPane="true" defaultActiveKey="Search" items={items} centered="true" />;
+  return <Tabs defaultActiveKey="Search" items={items} centered="true" />;
 }
