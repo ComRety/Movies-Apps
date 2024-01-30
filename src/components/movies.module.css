@@ -26,6 +26,7 @@
   border: 1px solid #d9d9d9;
   padding: 2px 4px;
   border-radius: 2px;
+  margin-bottom: 4px;
   background: linear-gradient(0deg, #fafafa, #fafafa);
   margin-right: 5px;
   color: #000000a6;
@@ -39,6 +40,9 @@
 }
 
 .listGenre {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
   margin-top: 5px;
 }
 
@@ -107,4 +111,52 @@
   line-height: 22px;
   letter-spacing: 0px;
   text-align: left;
+}
+
+.red {
+  border: 2px solid #e90000;
+}
+
+.orange {
+  border: 2px solid #e97e00;
+}
+
+.yellow {
+  border: 2px solid #e9d100;
+}
+
+.green {
+  border: 2px solid #66e900;
+}
+
+.rate li {
+  font-size: 16px;
+}
+
+@media (max-width: 420px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+
+  .block {
+    display: block;
+    height: auto;
+  }
+
+  .imageBlock {
+    float: left;
+    height: 90px;
+    width: 60px;
+    margin: 10px 10px 0 10px;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .rate {
+    position: relative;
+    float: right;
+    margin-bottom: 10px;
+  }
 }
