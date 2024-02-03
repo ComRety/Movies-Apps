@@ -1,11 +1,14 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Spin, Alert } from 'antd';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Online } from 'react-detect-offline';
 
-import Offlines from './components/Offlines';
+// eslint-disable-next-line import/no-cycle
 import Tab from './components/Tab';
+import Offlines from './components/Offlines';
 import './app.css';
+
+export const Context = React.createContext();
 
 export default function App() {
   const [movies, setMovies] = useState([]);
@@ -18,6 +21,7 @@ export default function App() {
   const [genre, setGenre] = useState([]);
   const [guestId, setGuestId] = useState('');
   const [arrRating, setArrRatting] = useState([]);
+  const [pageRating, setPageRating] = useState(1);
 
   const genreRequest = () => {
     const options = {
@@ -89,9 +93,7 @@ export default function App() {
       options
     )
       .then((response) => response.json())
-      .then(() => {
-        rating();
-      })
+      .then(() => {})
       .catch((err) => setError(err));
   };
 
@@ -126,21 +128,29 @@ export default function App() {
     setCurrent(page);
   };
 
+  const changePage = (page) => {
+    setPageRating(page);
+  };
+
   if (loading) {
     return (
       <>
         <Online>
           <div className="app">
-            <Tab
-              genre={genre}
-              onChange={onChange}
-              movies={movies}
-              arrRating={arrRating}
-              addRating={addRating}
-              request={request}
-              current={current}
-              totalPages={totalPages}
-            />
+            <Context.Provider value={genre}>
+              <Tab
+                changePage={changePage}
+                pageRating={pageRating}
+                rating={rating}
+                onChange={onChange}
+                movies={movies}
+                arrRating={arrRating}
+                addRating={addRating}
+                request={request}
+                current={current}
+                totalPages={totalPages}
+              />
+            </Context.Provider>
             <Spin className="spin" />
           </div>
         </Online>
@@ -154,16 +164,20 @@ export default function App() {
       <>
         <Online>
           <div className="app">
-            <Tab
-              genre={genre}
-              onChange={onChange}
-              movies={movies}
-              arrRating={arrRating}
-              addRating={addRating}
-              request={request}
-              current={current}
-              totalPages={totalPages}
-            />
+            <Context.Provider value={genre}>
+              <Tab
+                changePage={changePage}
+                pageRating={pageRating}
+                rating={rating}
+                onChange={onChange}
+                movies={movies}
+                arrRating={arrRating}
+                addRating={addRating}
+                request={request}
+                current={current}
+                totalPages={totalPages}
+              />
+            </Context.Provider>
             <Alert message={error} type="error" />
           </div>
         </Online>
@@ -177,16 +191,20 @@ export default function App() {
       <>
         <Online>
           <div className="app">
-            <Tab
-              genre={genre}
-              onChange={onChange}
-              movies={movies}
-              arrRating={arrRating}
-              addRating={addRating}
-              request={request}
-              current={current}
-              totalPages={totalPages}
-            />
+            <Context.Provider value={genre}>
+              <Tab
+                changePage={changePage}
+                pageRating={pageRating}
+                rating={rating}
+                onChange={onChange}
+                movies={movies}
+                arrRating={arrRating}
+                addRating={addRating}
+                request={request}
+                current={current}
+                totalPages={totalPages}
+              />
+            </Context.Provider>
             <Alert message="Не удалось найти фильмы по данному запросу, попробуйте еще раз" type="warning" />
           </div>
         </Online>
@@ -199,16 +217,20 @@ export default function App() {
     <>
       <Online>
         <div className="app">
-          <Tab
-            genre={genre}
-            onChange={onChange}
-            movies={movies}
-            arrRating={arrRating}
-            addRating={addRating}
-            request={request}
-            current={current}
-            totalPages={totalPages}
-          />
+          <Context.Provider value={genre}>
+            <Tab
+              changePage={changePage}
+              pageRating={pageRating}
+              rating={rating}
+              onChange={onChange}
+              movies={movies}
+              arrRating={arrRating}
+              addRating={addRating}
+              request={request}
+              current={current}
+              totalPages={totalPages}
+            />
+          </Context.Provider>
         </div>
       </Online>
       <Offlines />

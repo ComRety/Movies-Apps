@@ -1,12 +1,16 @@
 import { format } from 'date-fns';
 import { Rate } from 'antd';
+import { useState } from 'react';
 
-import Genre from './Genre';
+import Genre from '../genre/Genre';
+
 import classes from './movies.module.css';
 
-export default function Movie({ item, genre, addRating }) {
-  let key = -1;
+let key = -1;
+
+export default function Movie({ item, genre, addRating, rating }) {
   const listGenre = [];
+  const [ratValue, setRatValue] = useState(0);
 
   const colorBorder = (number) => {
     if (number <= 3) {
@@ -47,6 +51,7 @@ export default function Movie({ item, genre, addRating }) {
   };
 
   const ratingApp = (values) => {
+    setRatValue(values);
     addRating(item.id, values);
   };
 
@@ -75,7 +80,13 @@ export default function Movie({ item, genre, addRating }) {
           })}
         </div>
         <p className={classes.overview}>{reduction(item.overview)}</p>
-        <Rate className={classes.rate} allowHalf count={10} value={item.rating} onChange={ratingApp} />
+        <Rate
+          className={classes.rate}
+          allowHalf
+          count={10}
+          value={ratValue === 0 ? rating : ratValue}
+          onChange={ratingApp}
+        />
       </div>
     </li>
   );

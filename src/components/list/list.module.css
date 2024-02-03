@@ -1,0 +1,16 @@
+.list {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+
+  position: relative;
+  display: grid;
+  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
+@media (max-width: 420px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+}
